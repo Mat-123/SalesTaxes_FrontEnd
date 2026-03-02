@@ -1,28 +1,87 @@
 import React, { useState } from "react";
+import { Routes, Route, NavLink } from "react-router-dom";
 import Home from "./pages/Home";
+import Basket from "./pages/Basket";
 
 function App() {
+  const [basket, setBasket] = useState([]);
+
+  const addToBasket = (product) => {
+    setBasket((prev) => {
+      const alreadyAdded = prev.find((p) => p.id === product.id);
+      if (alreadyAdded) {
+        return prev.map((p) =>
+          p.id === product.id ? { ...p, quantity: p.quantity + 1 } : p,
+        );
+      }
+
+      return [...prev, { ...product, quantity: 1 }];
+    });
+  };
+
+  const removeFromBasket = (id) => {
+    setBasket((prev) => prev.filter((p) => p.id !== id));
+  };
+
+  const reduceQuantity = (id) => {
+    setBasket((prev) =>
+      prev
+        .map((p) => (p.id === id ? { ...p, quantity: p.quantity - 1 } : p))
+        .filter((p) => p.quantity > 0),
+    );
+  };
+
   return (
     <div>
-      <nav className="navbar navbar-light bg-light mb-3">
-        <div className="container-fluid">
-          <button
-            className="btn btn-outline-primary me-2"
-            onClick={() => setPage("home")}
+      <nav className="navbar navbar-dark bg-dark mb-3">
+        <div className="container-fluid px-5">
+          <a className="navbar-brand me-auto" href="#">
+            Sales Taxes Shop
+          </a>
+          <NavLink
+            to="/"
+            end
+            className={({ isActive }) =>
+              `nav-link text-white ${isActive ? "fw-bold border-bottom border-3" : ""}`
+            }
           >
-            Home
-          </button>
-          <button
-            className="btn btn-outline-secondary"
-            onClick={() => setPage("basket")}
+            HOME
+          </NavLink>
+
+          <NavLink
+            to="/basket"
+            className={({ isActive }) =>
+              `nav-link text-white ms-3 ${isActive ? "fw-bold border-bottom border-3" : ""}`
+            }
           >
-            Basket
-          </button>
+            BASKET ({basket.reduce((acc, p) => acc + p.quantity, 0)})
+          </NavLink>
+
+          <NavLink
+            to="/orders"
+            className={({ isActive }) =>
+              `nav-link text-white ms-3 ${isActive ? "fw-bold border-bottom border-3" : ""}`
+            }
+          >
+            ORDERS
+          </NavLink>
         </div>
       </nav>
 
       <div className="container">
-        <Home />
+        <Routes>
+          <Route path="/" element={<Home onAddToBasket={addToBasket} />} />
+          <Route
+            path="/basket"
+            element={
+              <Basket
+                basket={basket}
+                onDecrease={reduceQuantity}
+                onRemove={removeFromBasket}
+              />
+            }
+          />
+        </Routes>
       </div>
     </div>
   );

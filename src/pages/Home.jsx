@@ -20,7 +20,7 @@ export default function Home({ onAddToBasket }) {
   return (
     <div className="d-flex gap-3">
       <div className="flex-grow-1">
-        <ProductList products={products} onAddToCart={onAddToBasket} />
+        <ProductList products={products} onAddToBasket={onAddToBasket} />
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 import React from "react";
 import "./ProductCard.css";
 
-export default function ProductCard({ product }) {
+export default function ProductCard({ product, onAddToBasket }) {
   const isTaxFree = [1, 2, 3].includes(product.category);
 
   return (
