@@ -17,6 +17,7 @@ Frontend application built with React and Vite.
 
 ## Installation
 
+```bash
 1) Clone the repository:
 
 git clone https://github.com/username/SalesTaxes_FrontEnd.git
