@@ -1,0 +1,8 @@
+.card-custom {
+  width: 18rem;
+  height: 280px;
+}
+
+.title-min-height {
+  min-height: 3rem;
+}
