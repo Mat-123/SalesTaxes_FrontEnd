@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Routes, Route, NavLink } from "react-router-dom";
 import Home from "./pages/Home";
 import Basket from "./pages/Basket";
+import Orders from "./pages/Orders";
+import OrderDetail from "./pages/OrderDetail";
 
 function App() {
   const [basket, setBasket] = useState([]);
@@ -29,6 +31,18 @@ function App() {
         .map((p) => (p.id === id ? { ...p, quantity: p.quantity - 1 } : p))
         .filter((p) => p.quantity > 0),
     );
+  };
+
+  const increaseQuantity = (id) => {
+    setBasket((prev) =>
+      prev
+        .map((p) => (p.id === id ? { ...p, quantity: p.quantity + 1 } : p))
+        .filter((p) => p.quantity > 0),
+    );
+  };
+
+  const clearBasket = () => {
+    setBasket([]);
   };
 
   return (
@@ -78,9 +92,13 @@ function App() {
                 basket={basket}
                 onDecrease={reduceQuantity}
                 onRemove={removeFromBasket}
+                onIncrease={increaseQuantity}
+                onClearBasket={clearBasket}
               />
             }
           />
+          <Route path="/orders" element={<Orders />} />
+          <Route path="/orders/:id" element={<OrderDetail />} />
         </Routes>
       </div>
     </div>
